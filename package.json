@@ -1,0 +1,37 @@
+{
+  "name": "bbgraph",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "go run graphql.go & babel-node ./server.js",
+    "update-schema": "cd ./scripts && go run updateSchema.go"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-core": "6.7.6",
+    "babel-plugin-transform-runtime": "6.7.5",
+    "babel-preset-es2015": "6.6.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-1": "6.5.0",
+    "babel-register": "6.7.2",
+    "babel-relay-plugin": "^0.9.1",
+    "babel-runtime": "6.6.1",
+    "express": "^4.14.0",
+    "react": "^15.2.0",
+    "react-dom": "^15.2.0",
+    "react-relay": "^0.9.1",
+    "react-router": "^2.5.2",
+    "react-router-relay": "^0.13.3",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.7.6",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-transform-runtime": "^6.7.5",
+    "babel-preset-es2015": "^6.6.0"
+  }
+}
