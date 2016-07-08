@@ -1,20 +1,20 @@
 package data
 
-// Model structs
+// User structs
 type User struct {
-	Id     string   `json:"id"`
+	ID     string   `json:"id"`
 	Name   string   `json:"name"`
 	Photos []*Photo `json:"photos"`
 }
 
 type Photo struct {
-	Id   string `json:"id"`
+	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
 // Mock data
 var viewer = &User{
-	Id:   "1",
+	ID:   "1",
 	Name: "Anonymous",
 }
 var photos = []*Photo{
@@ -26,7 +26,7 @@ var photos = []*Photo{
 // Data accessors
 func GetPhoto(id string) *Photo {
 	for _, photo := range photos {
-		if photo.Id == id {
+		if photo.ID == id {
 			return photo
 		}
 	}
@@ -36,7 +36,7 @@ func GetPhotos() []*Photo {
 	return photos
 }
 func GetUser(id string) *User {
-	if id == viewer.Id {
+	if id == viewer.ID {
 		return viewer
 	}
 	return nil

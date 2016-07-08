@@ -18,7 +18,6 @@ class App extends React.Component {
 
           {this.props.children}
 
-//          <PhotoListFooter photos={this.props.viewer.photos} viewer={this.props.viewer}/>
         </section>
         <footer className="info">
           <p>Words words words</p>
@@ -27,9 +26,10 @@ class App extends React.Component {
     );
   }
 }
+//          <PhotoListFooter photos={this.props.viewer.photos} viewer={this.props.viewer}/>
 
 export default Relay.createContainer(App, {
   fragments: {
-    viewer: () => Relay.QL`fragment on User {photos(first: 10) {edges {node {id,name,},},},}`,
+    viewer: () => Relay.QL`fragment on User {photos(first: 10) {edges {node {id,name}}}}`,
   },
 });

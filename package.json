@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "go run graphql.go & babel-node ./server.js",
+    "build": "go build -o bin/bbgraph && codesign -s \"${CERT}\" bin/bbgraph",
+    "start": "npm run build && concurrently --kill-others \"bin/bbgraph\"  \"babel-node ./server.js\"",
     "update-schema": "cd ./scripts && go run updateSchema.go"
   },
   "author": "",

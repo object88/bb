@@ -11,7 +11,7 @@ class PhotoList extends React.Component {
   render() {
     var numPhotos = this.props.viewer.totalCount;
     return (
-      <section classname="main">
+      <section className="main">
         <ul className="photo-list">
           {this.renderPhotos()}
         </ul>
@@ -22,18 +22,17 @@ class PhotoList extends React.Component {
 
 export default Relay.createContainer(PhotoList, {
   initialVariables: {
+    limit: 200
   },
 
-  prepareVariables() {
-    return {
-      limit: 200
-    };
-  },
+  // prepareVariables() {
+  //   return {
+  //     limit: 200
+  //   };
+  // },
 
   fragments: {
-    viewer: () => Relay.QL`fragment on User {
-      photos,
-      totalCount
-    }`
+//    viewer: () => Relay.QL`fragment on User { photos, totalCount }`
+    viewer: () => Relay.QL`fragment on User { photos(first: 10) {edges {node {id,name}}}}`
   }
 });

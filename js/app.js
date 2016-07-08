@@ -26,7 +26,8 @@ ReactDOM.render(
       history={browserHistory}
       render={applyRouterMiddleware(useRelay)}>
     <Route path="/" component={App} queries={ViewerQueries}>
-      <IndexRoute component={PhotoList} queries={ViewerQueries} />
+      <IndexRoute component={PhotoList} queries={ViewerQueries} prepareParams={params => ({... params, status:'any' })} />
+      <Route path=":status" component={PhotoList} queries={ViewerQueries} />
     </Route>
   </Router>,
   document.getElementById('root')
