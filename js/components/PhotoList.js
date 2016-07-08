@@ -32,7 +32,6 @@ export default Relay.createContainer(PhotoList, {
   // },
 
   fragments: {
-//    viewer: () => Relay.QL`fragment on User { photos, totalCount }`
-    viewer: () => Relay.QL`fragment on User { photos(first: 10) {edges {node {id,name}}}}`
+    viewer: () => Relay.QL`fragment on User { photos(first: 10) {edges {node {id,name}}}, totalCount }`
   }
 });

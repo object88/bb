@@ -7,6 +7,7 @@ import (
 )
 
 var photoType *graphql.Object
+var reactionType *graphql.Object
 var userType *graphql.Object
 
 var nodeDefinitions *relay.NodeDefinitions
@@ -64,6 +65,26 @@ func init() {
 	photoConnection = relay.ConnectionDefinitions(relay.ConnectionConfig{
 		Name:     "PhotoConnection",
 		NodeType: photoType,
+	})
+
+	reactionType = graphql.NewObject(graphql.ObjectConfig{
+		Name:        "Reaction",
+		Description: "A user's reaction to a photo",
+		Fields: graphql.Fields{
+			"id": relay.GlobalIDField("Reaction", nil),
+			"reaction": &graphql.Field{
+				Description: "The reaction value",
+				Type:        graphql.Int,
+			},
+			"photo": &graphql.Field{
+				Description: "The photo related to the reaction",
+				Type:        graphql.String, // NOTE!  WRONG!
+			},
+			"user": &graphql.Field{
+				Description: "The user who generated the reaction",
+				Type:        graphql.String, // NOTE!  WRONG!
+			},
+		},
 	})
 
 	userType = graphql.NewObject(graphql.ObjectConfig{
