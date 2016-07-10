@@ -1,25 +1,11 @@
 package data
 
-// Reaction represents a user's response to a photo
-type Reaction struct {
-	ID       string `json:"id"`
-	Photo    *Photo `json:"photo"`
-	Reaction int    `json:"reaction"`
-	User     *User  `json:"user"`
-}
+import (
+	"fmt"
 
-// Photo is the binary image data and metadata
-type Photo struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
-// User is a application user, including 'Anonymous'
-type User struct {
-	ID     string   `json:"id"`
-	Name   string   `json:"name"`
-	Photos []*Photo `json:"photos"`
-}
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
+)
 
 // Mock data
 var photos = []*Photo{
@@ -37,19 +23,45 @@ var reactions = []*Reaction{
 }
 var viewer = users[0]
 
+func getSession() *mgo.Session {
+	s, err := mgo.Dial("127.0.0.1:27017/")
+
+	if err != nil {
+		fmt.Printf("Failed to create session to database: %s\n", err)
+		panic(err)
+	}
+
+	fmt.Printf("Connected to mongo database.\n")
+	return s
+}
+
+func getCollection(s *mgo.Session, dbName string, collectionName string) *mgo.Collection {
+	collection := s.DB(dbName).C(collectionName)
+	return collection
+}
+
 // GetPhoto returns a *Photo with the matching id
 func GetPhoto(id string) *Photo {
-	for _, photo := range photos {
-		if photo.ID == id {
-			return photo
-		}
-	}
-	return nil
+	oid := bson.ObjectIdHex(id)
+	s := getSession()
+	c := getCollection(s, "bbgraph", "photos")
+	query := c.Find(bson.M{"_id": oid})
+	var p *Photo
+	query.One(p)
+	return p
 }
 
 // GetPhotos returns all photos
 func GetPhotos() []*Photo {
-	return photos
+	s := getSession()
+	c := getCollection(s, "bbgraph", "photos")
+	query := c.Find(nil)
+	var photos []Photo
+	query.All(&photos)
+	if photos != nil {
+		return PhotoSliceToPhotoPointerSlice(photos)
+	}
+	return []*Photo{}
 }
 
 // GetUser returns a *User with the matching id
@@ -63,6 +75,15 @@ func GetUser(id string) *User {
 // GetViewer returns the current user
 func GetViewer() *User {
 	return viewer
+}
+
+// PhotoSliceToPhotoPointerSlice turns the []Photo into []*Photo
+func PhotoSliceToPhotoPointerSlice(photos []Photo) []*Photo {
+	var photoPointerSlice = make([]*Photo, len(photos))
+	for i, d := range photos {
+		photoPointerSlice[i] = &d
+	}
+	return photoPointerSlice
 }
 
 // PhotosToInterfaceSlice does some shit I don't understand the need for.

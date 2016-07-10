@@ -13,6 +13,7 @@ var userType *graphql.Object
 var nodeDefinitions *relay.NodeDefinitions
 var photoConnection *relay.GraphQLConnectionDefinitions
 
+// Schema is our published GraphQL representation of objects and mutations
 var Schema graphql.Schema
 
 func init() {
@@ -78,11 +79,11 @@ func init() {
 			},
 			"photo": &graphql.Field{
 				Description: "The photo related to the reaction",
-				Type:        graphql.String, // NOTE!  WRONG!
+				Type:        photoType,
 			},
 			"user": &graphql.Field{
 				Description: "The user who generated the reaction",
-				Type:        graphql.String, // NOTE!  WRONG!
+				Type:        userType,
 			},
 		},
 	})

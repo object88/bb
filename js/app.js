@@ -1,11 +1,16 @@
 import 'babel-polyfill';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactRouterRelay from 'react-router-relay';
 import Relay from 'react-relay';
 import { IndexRoute, Route, Router, browserHistory } from 'react-router';
 import applyRouterMiddleware from 'react-router/lib/applyRouterMiddleware';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { black, grey100, gray300, gray500 } from 'material-ui/styles/colors';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import useRelay from 'react-router-relay';
 
 import App from './components/App';
@@ -19,19 +24,38 @@ import ViewerQueries from './queries/ViewerQueries';
 //   new RelayLocalSchema.NetworkLayer({ schema })
 // );
 
+injectTapEventPlugin();
+
+// This replaces the textColor value on the palette
+// and then update the keys for each component that depends on it.
+// More on Colors: http://www.material-ui.com/#/customization/colors
+const muiTheme = getMuiTheme(darkBaseTheme, {
+  palette: {
+    textColor: grey100,
+    secondaryTextColor: gray300,
+    alternateTextColor: gray500,
+  },
+  appBar: {
+    color: black,
+//    height: spacing.desktopKeylineIncrement,
+//    padding: spacing.desktopGutter,
+    height: 50,
+    titleFontWeight: 900,
+  },
+});
+
 ReactDOM.render(
-  <Router
-      createElement={ReactRouterRelay.createElement}
-      environment={Relay.Store}
-      history={browserHistory}
-      render={applyRouterMiddleware(useRelay)}>
-    <Route path="/" component={App} queries={ViewerQueries}>
-      <IndexRoute component={PhotoList} queries={ViewerQueries} prepareParams={params => ({... params, status:'any' })} />
-      <Route path=":status" component={PhotoList} queries={ViewerQueries} />
-    </Route>
-  </Router>,
+  <MuiThemeProvider muiTheme={muiTheme}>
+    <Router
+        createElement={ReactRouterRelay.createElement}
+        environment={Relay.Store}
+        history={browserHistory}
+        render={applyRouterMiddleware(useRelay)}>
+      <Route path="/" component={App} queries={ViewerQueries}>
+        <IndexRoute component={PhotoList} queries={ViewerQueries} prepareParams={params => ({... params, status:'any' })} />
+        <Route path=":status" component={PhotoList} queries={ViewerQueries} />
+      </Route>
+    </Router>
+  </MuiThemeProvider>,
   document.getElementById('root')
 );
-
-// <IndexRoute component={PhotoList} queries={ViewerQueries} queryParams={['status']} />
-// <Route path=":status" component={PhotoList} queries={ViewerQueries} />
