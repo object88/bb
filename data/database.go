@@ -1,8 +1,6 @@
 package data
 
 import (
-	"fmt"
-
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -23,18 +21,6 @@ var reactions = []*Reaction{
 }
 var viewer = users[0]
 
-func getSession() *mgo.Session {
-	s, err := mgo.Dial("127.0.0.1:27017/")
-
-	if err != nil {
-		fmt.Printf("Failed to create session to database: %s\n", err)
-		panic(err)
-	}
-
-	fmt.Printf("Connected to mongo database.\n")
-	return s
-}
-
 func getCollection(s *mgo.Session, dbName string, collectionName string) *mgo.Collection {
 	collection := s.DB(dbName).C(collectionName)
 	return collection
@@ -43,7 +29,7 @@ func getCollection(s *mgo.Session, dbName string, collectionName string) *mgo.Co
 // GetPhoto returns a *Photo with the matching id
 func GetPhoto(id string) *Photo {
 	oid := bson.ObjectIdHex(id)
-	s := getSession()
+	s := GetSession()
 	c := getCollection(s, "bbgraph", "photos")
 	query := c.Find(bson.M{"_id": oid})
 	var p *Photo
@@ -53,7 +39,7 @@ func GetPhoto(id string) *Photo {
 
 // GetPhotos returns all photos
 func GetPhotos() []*Photo {
-	s := getSession()
+	s := GetSession()
 	c := getCollection(s, "bbgraph", "photos")
 	query := c.Find(nil)
 	var photos []Photo
