@@ -10,6 +10,7 @@ import (
 var once sync.Once
 var session *mgo.Session
 
+// GetSession retreives the one and only MongoDB session
 func GetSession() *mgo.Session {
 	once.Do(func() {
 		session = instantiate()

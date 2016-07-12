@@ -19,6 +19,8 @@ func main() {
 	// create graphql endpoint
 	http.Handle("/graphql", h)
 
+	data.Init()
+
 	// serve!
 	port := ":8080"
 	log.Printf(`GraphQL server starting up on http://localhost%v`, port)
