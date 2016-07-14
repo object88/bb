@@ -4,7 +4,7 @@ import Relay from 'react-relay'
 class PhotoList extends React.Component {
   renderPhotos() {
     return this.props.viewer.photos.edges.map(edge =>
-      <li key={edge.node.id}>{edge.node.name} (ID: {edge.node.id})</li>
+      <li key={edge.node.id}>{edge.node.name} reaction: {edge.node.reaction}</li>
     );
   }
 
@@ -15,6 +15,9 @@ class PhotoList extends React.Component {
         <ul className="photo-list">
           {this.renderPhotos()}
         </ul>
+        <div>
+          Total photos: {numPhotos}
+        </div>
       </section>
     );
   }
@@ -32,6 +35,6 @@ export default Relay.createContainer(PhotoList, {
   // },
 
   fragments: {
-    viewer: () => Relay.QL`fragment on User { photos(first: 10) {edges {node {id,name}}}, totalCount }`
+    viewer: () => Relay.QL`fragment on User { photos(first: 10) {edges {node {id,name, reaction}}}, totalCount }`
   }
 });

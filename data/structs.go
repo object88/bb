@@ -21,5 +21,4 @@ type Photo struct {
 type User struct {
 	ID   bson.ObjectId `json:"id" bson:"_id"`
 	Name string        `json:"name" bson:"name"`
-	//	Photos []*Photo `json:"photos"`
 }

@@ -57,6 +57,14 @@ func init() {
 				Description: "The name of the photo",
 				Type:        graphql.String,
 			},
+			"reaction": &graphql.Field{
+				Description: "The overall reaction",
+				Type:        graphql.Float,
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					source := p.Source.(*Photo)
+					return GetPhotoReaction(source.ID), nil
+				},
+			},
 		},
 		Interfaces: []*graphql.Interface{
 			nodeDefinitions.NodeInterface,
@@ -162,4 +170,14 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+// PhotosToInterfaceSlice gets an interface slice.
+// See https://github.com/golang/go/wiki/InterfaceSlice
+func PhotosToInterfaceSlice(photos ...*Photo) []interface{} {
+	var interfaceSlice = make([]interface{}, len(photos))
+	for i, d := range photos {
+		interfaceSlice[i] = d
+	}
+	return interfaceSlice
 }
