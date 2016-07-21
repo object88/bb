@@ -1,10 +1,23 @@
 import express from 'express';
+import fs from 'fs';
 import path from 'path';
 import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
+
+import Handlebars from 'handlebars';
+import WebpackDevMiddleware from 'webpack-dev-middleware';
+import WebpackHotMiddleware from 'webpack-hot-middleware';
+
+import httpProxy from 'http-proxy';
 
 const APP_PORT = 3000;
 const GRAPHQL_PORT = 8080;
+
+const templatePath = path.join(__dirname, 'public', 'index.handlebar');
+const source = fs.readFileSync(templatePath, 'utf8');
+const template = Handlebars.compile(source);
+const html = template({apiKey: process.env.API_KEY, clientId: process.env.CLIENT_ID});
+
+var apiProxy = httpProxy.createProxyServer();
 
 // Serve the Relay app
 var compiler = webpack({
@@ -25,14 +38,43 @@ var compiler = webpack({
   },
   output: {filename: 'app.js', path: '/'}
 });
-var app = new WebpackDevServer(compiler, {
+const middleware = WebpackDevMiddleware(compiler, {
   contentBase: '/public/',
-  proxy: {'/graphql': `http://localhost:${GRAPHQL_PORT}`},
+//  proxy: {'/graphql': `http://localhost:${GRAPHQL_PORT}`},
   publicPath: '/js/',
-  stats: {chunks: false, colors: true}
+  stats: {
+    colors: true,
+    hash: false,
+    timings: true,
+    chunks: false,
+    chunkModules: false,
+    modules: false
+  }
 });
-// Serve static resources
-app.use('/', express.static(path.resolve(__dirname, 'public')));
-app.listen(APP_PORT, () => {
-  console.log(`App is now running on http://localhost:${APP_PORT}`);
+const app = express();
+app.use(middleware);
+app.use(WebpackHotMiddleware(compiler));
+// Proxy api requests
+app.use("/graphql", function(req, res) {
+  console.log(`Proxying request for '${req.baseUrl}'`)
+  req.url = req.baseUrl; // Janky hack...
+  apiProxy.web(req, res, {
+    target: { host: "localhost", port: GRAPHQL_PORT }
+  });
+});
+app.get('/', function response(req, res) {
+  console.log('Request for index.html...');
+  res.write(html);
+  res.end();
+});
+app.get('/css/*', function response(req, res) {
+  console.log(`Received request '${req.url}'`);
+  res.sendFile(path.join(__dirname, 'public', req.url));
+});
+
+app.listen(APP_PORT, 'localhost', function onStart(err) {
+  if (err) {
+    console.log(err);
+  }
+  console.info(`Listening on port ${APP_PORT}. Open up http://0.0.0.0:${APP_PORT}/ in your browser.`);
 });
