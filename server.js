@@ -40,7 +40,6 @@ var compiler = webpack({
 });
 const middleware = WebpackDevMiddleware(compiler, {
   contentBase: '/public/',
-//  proxy: {'/graphql': `http://localhost:${GRAPHQL_PORT}`},
   publicPath: '/js/',
   stats: {
     colors: true,

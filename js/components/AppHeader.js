@@ -14,6 +14,7 @@ class AppHeader extends React.Component {
   };
 
   onSignIn(googleUser) {
+    console.log('Sign in returned');
     var profile = googleUser.getBasicProfile();
     console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
     console.log('Name: ' + profile.getName());
@@ -22,29 +23,19 @@ class AppHeader extends React.Component {
   }
 
   onTouchTap(event, menuItem, index) {
-    console.log('Got touch tap');
-
-    const apiKey = document.head.querySelector("[name=google_api_key]").content;
-    const clientId = document.head.querySelector("[name=google-signin-client_id]").content;
-    const scopes = 'profile'
-
-    gapi.load('client:auth2', function() {
-      gapi.client.setApiKey(apiKey);
-      gapi.auth2.init({
-        client_id: clientId,
-        scope: scopes
-      }).then(function() {
+    gapi.load('client:auth2', () => {
+      console.log('Finished client:auth2 load', this);
+      gapi.auth2.init({}).then(() => {
         // Init completed!
-        console.log('Init completed')
-        gapi.auth2.getAuthInstance().signIn().then(function() {
-          console.log('Sign in returned');
-        });
+        console.log('Init completed', this)
+        gapi.auth2.getAuthInstance().signIn().then(this.onSignIn);
       });
     });
   }
 
 //  iconClassNameRight="muidocs-icon-navigation-expand-more"
   render() {
+    console.log('render', this);
     return <AppBar
       title="BRIGHTER BLACKER"
       iconElementRight={
@@ -57,9 +48,7 @@ class AppHeader extends React.Component {
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
         >
           <MenuItem primaryText="Help" />
-          <MenuItem primaryText="Sign on" onTouchTap={this.onTouchTap}>
-            <div className="g-signin2" data-onsuccess={this.onSignIn} />
-          </MenuItem>
+          <MenuItem primaryText="Sign on" onTouchTap={this.onTouchTap.bind(this)} />
         </IconMenu>
       }
     />;
