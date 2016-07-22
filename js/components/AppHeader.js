@@ -24,10 +24,7 @@ class AppHeader extends React.Component {
 
   onTouchTap(event, menuItem, index) {
     gapi.load('client:auth2', () => {
-      console.log('Finished client:auth2 load', this);
       gapi.auth2.init({}).then(() => {
-        // Init completed!
-        console.log('Init completed', this)
         gapi.auth2.getAuthInstance().signIn().then(this.onSignIn);
       });
     });
@@ -35,7 +32,6 @@ class AppHeader extends React.Component {
 
 //  iconClassNameRight="muidocs-icon-navigation-expand-more"
   render() {
-    console.log('render', this);
     return <AppBar
       title="BRIGHTER BLACKER"
       iconElementRight={
