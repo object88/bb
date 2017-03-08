@@ -15,6 +15,7 @@ const GRAPHQL_PORT = 8080;
 const templatePath = path.join(__dirname, 'public', 'index.handlebar');
 const source = fs.readFileSync(templatePath, 'utf8');
 const template = Handlebars.compile(source);
+
 const html = template({apiKey: process.env.API_KEY, clientId: process.env.CLIENT_ID});
 
 var apiProxy = httpProxy.createProxyServer();

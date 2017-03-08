@@ -44,7 +44,7 @@ class AppHeader extends React.Component {
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
         >
           <MenuItem primaryText="Help" />
-          <MenuItem primaryText="Sign on" onTouchTap={this.onTouchTap.bind(this)} />
+          <MenuItem primaryText="Sign in" onTouchTap={this.onTouchTap.bind(this)} />
         </IconMenu>
       }
     />;
