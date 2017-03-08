@@ -10,7 +10,6 @@ import applyRouterMiddleware from 'react-router/lib/applyRouterMiddleware';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { black, grey100, gray300, gray500 } from 'material-ui/styles/colors';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import useRelay from 'react-router-relay';
 
 import App from './components/App';
@@ -23,8 +22,6 @@ import ViewerQueries from './queries/ViewerQueries';
 // Relay.injectNetworkLayer(
 //   new RelayLocalSchema.NetworkLayer({ schema })
 // );
-
-injectTapEventPlugin();
 
 // This replaces the textColor value on the palette
 // and then update the keys for each component that depends on it.

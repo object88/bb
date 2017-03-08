@@ -32,6 +32,6 @@ class App extends React.Component {
 
 export default Relay.createContainer(App, {
   fragments: {
-    viewer: () => Relay.QL`fragment on User { ${AppHeader.getFragment('viewer')} photos(first: 10) {edges {node {id,name}}}}`,
+    viewer: () => Relay.QL`fragment on User { ${AppHeader.getFragment('viewer')} photos(first: 10) {edges {node {id}}}}`,
   },
 });

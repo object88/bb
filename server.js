@@ -10,7 +10,7 @@ import WebpackHotMiddleware from 'webpack-hot-middleware';
 import httpProxy from 'http-proxy';
 
 const APP_PORT = 3000;
-const GRAPHQL_PORT = 8080;
+const GRAPHQL_PORT = 8081;
 
 const templatePath = path.join(__dirname, 'public', 'index.handlebar');
 const source = fs.readFileSync(templatePath, 'utf8');

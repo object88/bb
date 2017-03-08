@@ -1,14 +1,9 @@
 # Brighter, Blacker
 
-A photo portfolio web application in N parts
+A photo portfolio web application, meant to be used in conjunction with [bbservice](https://github.com/object88/bbservice).
 
-#### Data Storage
-* [MongoDB](https://www.mongodb.com/)
-
-#### Back end
-* [Go](https://golang.org/)
-* [mgo](https://labix.org/mgo)
-* [Relay](https://github.com/graphql-go/relay)
+## Note
+This application requires the schema file from `bbservice` to be copied to `/schema/schema.json`.
 
 #### Front end
 * [ES6 via Node](https://nodejs.org/en/docs/es6/)
