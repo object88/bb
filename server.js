@@ -57,19 +57,19 @@ const app = express();
 app.use(middleware);
 app.use(WebpackHotMiddleware(compiler));
 // Proxy api requests
-app.use("/graphql", function(req, res) {
+app.use("/graphql", function(req: express$Request, res) {
   console.log(`Proxying request for '${req.baseUrl}'`)
   req.url = req.baseUrl; // Janky hack...
   apiProxy.web(req, res, {
     target: { host: "localhost", port: GRAPHQL_PORT }
   });
 });
-app.get('/', function response(req, res) {
+app.get('/', function response(req: express$Request, res) {
   console.log('Request for index.html...');
   res.write(html);
   res.end();
 });
-app.get('/css/*', function response(req, res) {
+app.get('/css/*', function response(req: express$Request, res) {
   console.log(`Received request '${req.url}'`);
   res.sendFile(path.join(__dirname, 'public', req.url));
 });
