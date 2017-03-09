@@ -2,11 +2,13 @@
 import React from 'react';
 import Relay from 'react-relay';
 
+type Props = {
+  relay: Object,
+  viewer: Object,
+}
+
 class AppHeader extends React.Component {
-  static propTypes = {
-    relay: React.PropTypes.object.isRequired,
-    viewer: React.PropTypes.object.isRequired
-  };
+  props: Props;
 
   render() {
     return <div>BRIGHTER BLACKER</div>

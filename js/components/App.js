@@ -4,12 +4,14 @@ import Relay from 'react-relay';
 
 import AppHeader from './AppHeader';
 
+type Props = {
+  children: typeof React.PropTypes.node,
+  relay: Object,
+  viewer: Object,
+}
+
 class App extends React.Component {
-  static propTypes = {
-    viewer: React.PropTypes.object.isRequired,
-    children: React.PropTypes.node.isRequired,
-    relay: React.PropTypes.object.isRequired,
-  };
+  props: Props;
 
   render() {
     const { viewer, children } = this.props;
