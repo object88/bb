@@ -24,11 +24,12 @@ var apiProxy = httpProxy.createProxyServer();
 var compiler = webpack({
   entry: path.resolve(__dirname, 'js', 'app.js'),
   module: {
-    loaders: [
+    rules: [
       {
-        cacheDirectory: true,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        use: [{
+          loader: 'babel-loader',
+        }],
         //query: {plugins: [path.resolve(__dirname, 'build', 'babelRelayPlugin')]},
         // resolveLoader: {
         //   root: path.join(__dirname, 'node_modules')
