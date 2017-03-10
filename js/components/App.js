@@ -8,7 +8,7 @@ type Props = {
   children: typeof React.PropTypes.node,
   relay: Object,
   viewer: Object,
-}
+};
 
 class App extends React.Component {
   props: Props;

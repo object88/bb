@@ -22,7 +22,7 @@ class PhotoList extends React.Component {
 
 export default Relay.createContainer(PhotoList, {
   initialVariables: {
-    limit: 200
+    limit: 200,
   },
 
   // prepareVariables() {
@@ -32,6 +32,6 @@ export default Relay.createContainer(PhotoList, {
   // },
 
   fragments: {
-    viewer: () => Relay.QL`fragment on User { photos(first: 10) {edges {node { id }}}}`
-  }
+    viewer: () => Relay.QL`fragment on User { photos(first: 10) {edges {node { id }}}}`,
+  },
 });

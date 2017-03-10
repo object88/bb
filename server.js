@@ -35,11 +35,11 @@ var compiler = webpack({
         // resolveLoader: {
         //   root: path.join(__dirname, 'node_modules')
         // },
-        test: /\.js$/
-      }
-    ]
+        test: /\.js$/,
+      },
+    ],
   },
-  output: {filename: 'app.js', path: '/'}
+  output: {filename: 'app.js', path: '/'},
 });
 const middleware = WebpackDevMiddleware(compiler, {
   contentBase: '/public/',
@@ -50,8 +50,8 @@ const middleware = WebpackDevMiddleware(compiler, {
     timings: true,
     chunks: false,
     chunkModules: false,
-    modules: false
-  }
+    modules: false,
+  },
 });
 const app = express();
 app.use(middleware);
@@ -61,7 +61,7 @@ app.use("/graphql", function(req: express$Request, res) {
   console.log(`Proxying request for '${req.baseUrl}'`)
   req.url = req.baseUrl; // Janky hack...
   apiProxy.web(req, res, {
-    target: { host: "localhost", port: GRAPHQL_PORT }
+    target: { host: "localhost", port: GRAPHQL_PORT },
   });
 });
 app.get('/', function response(req: express$Request, res) {

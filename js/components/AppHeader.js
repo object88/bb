@@ -5,7 +5,7 @@ import Relay from 'react-relay';
 type Props = {
   relay: Object,
   viewer: Object,
-}
+};
 
 class AppHeader extends React.Component {
   props: Props;
@@ -17,6 +17,6 @@ class AppHeader extends React.Component {
 
 export default Relay.createContainer(AppHeader, {
   fragments: {
-    viewer: () => Relay.QL`fragment on User { id }`
-  }
+    viewer: () => Relay.QL`fragment on User { id }`,
+  },
 });
