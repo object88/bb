@@ -9,9 +9,8 @@ import { IndexRoute, Route, Router, browserHistory } from 'react-router';
 import applyRouterMiddleware from 'react-router/lib/applyRouterMiddleware';
 import useRelay from 'react-router-relay';
 
-import App from './components/App';
-import AppHomeRoute from './routes/AppHomeRoute';
-import PhotoList from './components/PhotoList';
+import AppContainer from './containers/AppContainer';
+import PhotoListContainer from './containers/PhotoListContainer';
 import ViewerQueries from './queries/ViewerQueries';
 
 ReactDOM.render(
@@ -20,9 +19,9 @@ ReactDOM.render(
       environment={Relay.Store}
       history={browserHistory}
       render={applyRouterMiddleware(useRelay)}>
-    <Route path="/" component={App} queries={ViewerQueries}>
-      <IndexRoute component={PhotoList} queries={ViewerQueries} prepareParams={params => ({... params, status:'any' })} />
-      <Route path=":status" component={PhotoList} queries={ViewerQueries} />
+    <Route path="/" component={AppContainer} queries={ViewerQueries}>
+      <IndexRoute component={PhotoListContainer} queries={ViewerQueries} prepareParams={params => ({... params, status:'any' })} />
+      <Route path=":status" component={PhotoListContainer} queries={ViewerQueries} />
     </Route>
   </Router>,
   document.getElementById('root')

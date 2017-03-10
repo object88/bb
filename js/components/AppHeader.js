@@ -7,16 +7,14 @@ type Props = {
   viewer: Object,
 };
 
-class AppHeader extends React.Component {
+const displayName = "AppHeader";
+
+export default class AppHeader extends React.Component {
+  static displayName = displayName;
+
   props: Props;
 
   render() {
     return <div>BRIGHTER BLACKER</div>
   }
 }
-
-export default Relay.createContainer(AppHeader, {
-  fragments: {
-    viewer: () => Relay.QL`fragment on User { id }`,
-  },
-});
