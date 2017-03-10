@@ -2,7 +2,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 
-import AppHeader from './AppHeader';
+import AppHeaderContainer from '../containers/AppHeaderContainer';
 
 type Props = {
   children: typeof React.PropTypes.node,
@@ -10,7 +10,11 @@ type Props = {
   viewer: Object,
 };
 
-class App extends React.Component {
+const displayName = "App";
+
+export default class App extends React.Component {
+  static displayName = displayName;
+
   props: Props;
 
   render() {
@@ -19,7 +23,7 @@ class App extends React.Component {
     return (
       <div data-framework="relay">
         <section className="photoapp">
-          <AppHeader viewer={viewer}/>
+          <AppHeaderContainer viewer={viewer}/>
 
           {children}
 
@@ -32,9 +36,3 @@ class App extends React.Component {
   }
 }
 //          <PhotoListFooter photos={this.props.viewer.photos} viewer={this.props.viewer}/>
-
-export default Relay.createContainer(App, {
-  fragments: {
-    viewer: () => Relay.QL`fragment on User { ${AppHeader.getFragment('viewer')} photos(first: 10) {edges {node {id}}}}`,
-  },
-});
