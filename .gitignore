@@ -4,5 +4,6 @@ bin
 node_modules
 schema
 
+*.pem
 npm-debug.log
 setup.sh
