@@ -1,7 +1,8 @@
 .DS_Store
 
+bin
 node_modules
-schema.json
+schema
 
 npm-debug.log
 setup.sh

@@ -1,6 +1,0 @@
-*.js.flow
-flow-typed
-node_modules
-schema/schema.json
-test
-webpack-stats.json
