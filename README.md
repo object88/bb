@@ -15,6 +15,10 @@ On the client side, BB uses React to manage component rendering, and Relay to ma
 ## Note
 This application requires the schema file from `bbservice` to be copied to `/schema/schema.json`.
 
+## Certificate creation
+
+`openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out cert.pem`
+
 #### Front end
 * ES6 via [Babel](https://babeljs.io/), [Node](https://nodejs.org/en/)
 * [Express](https://expressjs.com/)

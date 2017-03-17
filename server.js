@@ -22,40 +22,40 @@ const html = template({apiKey: process.env.API_KEY, clientId: process.env.CLIENT
 var apiProxy = httpProxy.createProxyServer();
 
 // Serve the Relay app
-var compiler = webpack({
-  entry: path.resolve(__dirname, 'js', 'app.js'),
-  module: {
-    rules: [
-      {
-        exclude: /node_modules/,
-        use: [{
-          loader: 'babel-loader',
-        }],
-        //query: {plugins: [path.resolve(__dirname, 'build', 'babelRelayPlugin')]},
-        // resolveLoader: {
-        //   root: path.join(__dirname, 'node_modules')
-        // },
-        test: /\.js$/,
-      },
-    ],
-  },
-  output: {filename: 'app.js', path: '/'},
-});
-const middleware = WebpackDevMiddleware(compiler, {
-  contentBase: '/public/',
-  publicPath: '/js/',
-  stats: {
-    colors: true,
-    hash: false,
-    timings: true,
-    chunks: false,
-    chunkModules: false,
-    modules: false,
-  },
-});
+// var compiler = webpack({
+//   entry: path.resolve(__dirname, 'js', 'app.js'),
+//   module: {
+//     rules: [
+//       {
+//         exclude: /node_modules/,
+//         use: [{
+//           loader: 'babel-loader',
+//         }],
+//         //query: {plugins: [path.resolve(__dirname, 'build', 'babelRelayPlugin')]},
+//         // resolveLoader: {
+//         //   root: path.join(__dirname, 'node_modules')
+//         // },
+//         test: /\.js$/,
+//       },
+//     ],
+//   },
+//   output: {filename: 'app.js', path: '/'},
+// });
+// const middleware = WebpackDevMiddleware(compiler, {
+//   contentBase: '/public/',
+//   publicPath: '/js/',
+//   stats: {
+//     colors: true,
+//     hash: false,
+//     timings: true,
+//     chunks: false,
+//     chunkModules: false,
+//     modules: false,
+//   },
+// });
 const app = express();
-app.use(middleware);
-app.use(WebpackHotMiddleware(compiler));
+// app.use(middleware);
+// app.use(WebpackHotMiddleware(compiler));
 // Proxy api requests
 app.use("/graphql", function(req: express$Request, res) {
   console.log(`Proxying request for '${req.baseUrl}'`)
@@ -68,6 +68,10 @@ app.get('/', function response(req: express$Request, res) {
   console.log('Request for index.html...');
   res.write(html);
   res.end();
+});
+app.get('/js/app.bundle.js', function response(req: express$Request, res) {
+  console.log(`Received request '${req.url}'`);
+  res.sendFile(path.join(__dirname, 'bin', 'app.bundle.js'));
 });
 app.get('/css/*', function response(req: express$Request, res) {
   console.log(`Received request '${req.url}'`);
