@@ -1,9 +1,8 @@
 .DS_Store
 
 bin
-node_modules
+public/app.bundle.*
 schema
 
 *.pem
-npm-debug.log
 setup.sh

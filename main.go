@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"net/http/httputil"
-	"net/url"
 	"strings"
 )
 
@@ -34,16 +32,8 @@ func main() {
 	}
 	t := buf.String()
 
-	url, _ := url.Parse(fmt.Sprintf("https://localhost:%d/graphql", graphqlPort))
-	fmt.Printf("Setting up proxy for %s\n", url.String())
-	proxy := httputil.NewSingleHostReverseProxy(url)
-
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
-	http.HandleFunc("/graphql/", func(resp http.ResponseWriter, req *http.Request) {
-		fmt.Printf("Proxying %s\n", req.URL.String())
-		proxy.ServeHTTP(resp, req)
-	})
 	http.HandleFunc("/", func(resp http.ResponseWriter, _ *http.Request) {
 		p, ok := resp.(http.Pusher)
 		if ok {
