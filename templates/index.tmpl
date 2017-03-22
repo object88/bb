@@ -2,10 +2,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="google_api_key" content="{{.APIKey}}">
-    <meta name="google-signin-client_id" content="{{.ClientID}}">
+    <meta name="google_api_key" content="{{ .APIKey }}">
+    <meta name="google-signin-client_id" content="{{ .ClientID }}">
     <meta name="google-signin-scope" content="profile">
-    <title>Relay • Starter Kit</title>
+    <title>Brighter Blacker</title>
     <script src="https://apis.google.com/js/api.js" async defer></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:900" rel="stylesheet">
     <link href="public/css/app.css" rel="stylesheet" type="text/css">
@@ -17,6 +17,6 @@
       // in developer tools for the native `fetch`.
       self.fetch = null;
     </script>
-    <script src="public/app.bundle.js"></script>
+{{ range .Scripts }}{{ template "script" . }}{{ end }}
   </body>
 </html>
