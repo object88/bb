@@ -36,9 +36,6 @@ func main() {
 		offset++
 	}
 	sort.Slice(manifestSlice, func(i int, j int) bool {
-		if manifestSlice[i].Priority == nil && manifestSlice[j].Priority == nil {
-			return false
-		}
 		if manifestSlice[i].Priority == nil {
 			return false
 		}
@@ -76,9 +73,9 @@ func main() {
 	http.HandleFunc("/", func(resp http.ResponseWriter, _ *http.Request) {
 		p, ok := resp.(http.Pusher)
 		if ok {
-			p.Push(manifest["manifest"].BundleName, nil)
-			p.Push(manifest["vendor"].BundleName, nil)
-			p.Push(manifest["app"].BundleName, nil)
+			p.Push(manifest["manifest"].Source, nil)
+			p.Push(manifest["vendor"].Source, nil)
+			p.Push(manifest["app"].Source, nil)
 			p.Push("/public/css/app.css", nil)
 		}
 		fmt.Fprint(resp, t)

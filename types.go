@@ -1,7 +1,9 @@
 package main
 
 type Source struct {
-	BundleName string  `json:"source"`
-	Map        *string `json:"map"`
-	Priority   *int    `json:"priority"`
+	CSS       *string `json:"css"`
+	CSSMap    *string `json:"cssMap"`
+	Priority  *int    `json:"priority"`
+	Source    string  `json:"source"`
+	SourceMap *string `json:"sourceMap"`
 }
