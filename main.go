@@ -1,12 +1,8 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
-	"sort"
 	"strings"
 )
 
@@ -15,58 +11,13 @@ const httpsPort = "3001"
 const graphqlPort = "8081"
 
 func main() {
-	rawJSON, err := ioutil.ReadFile("./resources/manifest.json")
+	manifest, highPriorityManifest := loadManifest()
+
+	index, err := loadTemplates(highPriorityManifest)
 	if err != nil {
 		panic(err.Error())
 	}
-
-	var manifest map[string]Source
-	err = json.Unmarshal(rawJSON, &manifest)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	manifestSlice := make([]Source, len(manifest))
-	offset, priorityCount := 0, 0
-	for _, v := range manifest {
-		manifestSlice[offset] = v
-		if v.Priority != nil {
-			priorityCount++
-		}
-		offset++
-	}
-	sort.Slice(manifestSlice, func(i int, j int) bool {
-		if manifestSlice[i].Priority == nil {
-			return false
-		}
-		if manifestSlice[j].Priority == nil {
-			return true
-		}
-		return *manifestSlice[i].Priority < *manifestSlice[j].Priority
-	})
-	highPriorityManifest := manifestSlice[0:priorityCount]
-
-	template, err := loadTemplates()
-	if err != nil {
-		panic(err.Error())
-	}
-
-	var buf bytes.Buffer
-	foo := struct {
-		APIKey   string
-		ClientID string
-		Scripts  []Source
-	}{
-		APIKey:   "123",
-		ClientID: "456",
-		Scripts:  highPriorityManifest,
-	}
-	err = template.Execute(&buf, foo)
-	if err != nil {
-		panic(err.Error())
-	}
-	t := buf.String()
-	fmt.Println(t)
+	fmt.Println(index)
 
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources"))))
 	http.HandleFunc("/", func(resp http.ResponseWriter, _ *http.Request) {
@@ -79,7 +30,7 @@ func main() {
 				p.Push("/resources/"+*manifest["app"].CSS, nil)
 			}
 		}
-		fmt.Fprint(resp, t)
+		fmt.Fprint(resp, index)
 	})
 	go http.ListenAndServeTLS(":"+httpsPort, "cert.pem", "key.pem", nil)
 	http.ListenAndServe(":"+httpPort, http.HandlerFunc(redirectToHTTPS))
