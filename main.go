@@ -68,15 +68,16 @@ func main() {
 	t := buf.String()
 	fmt.Println(t)
 
-	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources"))))
 	http.HandleFunc("/", func(resp http.ResponseWriter, _ *http.Request) {
 		p, ok := resp.(http.Pusher)
 		if ok {
-			p.Push(manifest["manifest"].Source, nil)
-			p.Push(manifest["vendor"].Source, nil)
-			p.Push(manifest["app"].Source, nil)
-			p.Push("/public/css/app.css", nil)
+			p.Push("/resources/"+manifest["manifest"].Source, nil)
+			p.Push("/resources/"+manifest["vendor"].Source, nil)
+			p.Push("/resources/"+manifest["app"].Source, nil)
+			if manifest["app"].CSS != nil {
+				p.Push("/resources/"+*manifest["app"].CSS, nil)
+			}
 		}
 		fmt.Fprint(resp, t)
 	})
