@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"sort"
 	"strings"
 )
 
@@ -25,6 +26,29 @@ func main() {
 		panic(err.Error())
 	}
 
+	manifestSlice := make([]Source, len(manifest))
+	offset, priorityCount := 0, 0
+	for _, v := range manifest {
+		manifestSlice[offset] = v
+		if v.Priority != nil {
+			priorityCount++
+		}
+		offset++
+	}
+	sort.Slice(manifestSlice, func(i int, j int) bool {
+		if manifestSlice[i].Priority == nil && manifestSlice[j].Priority == nil {
+			return false
+		}
+		if manifestSlice[i].Priority == nil {
+			return false
+		}
+		if manifestSlice[j].Priority == nil {
+			return true
+		}
+		return *manifestSlice[i].Priority < *manifestSlice[j].Priority
+	})
+	highPriorityManifest := manifestSlice[0:priorityCount]
+
 	template, err := loadTemplates()
 	if err != nil {
 		panic(err.Error())
@@ -34,11 +58,11 @@ func main() {
 	foo := struct {
 		APIKey   string
 		ClientID string
-		Scripts  map[string]Source
+		Scripts  []Source
 	}{
 		APIKey:   "123",
 		ClientID: "456",
-		Scripts:  manifest,
+		Scripts:  highPriorityManifest,
 	}
 	err = template.Execute(&buf, foo)
 	if err != nil {
