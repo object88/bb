@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"sort"
 )
@@ -16,6 +17,22 @@ func loadManifest() (map[string]Source, []Source) {
 	err = json.Unmarshal(rawJSON, &manifest)
 	if err != nil {
 		panic(err.Error())
+	}
+
+	for _, v := range manifest {
+		v.Source = "/resources/" + v.Source
+		if v.SourceMap != nil {
+			s := fmt.Sprintf("/resources/%s", *v.SourceMap)
+			v.SourceMap = &s
+		}
+		if v.CSS != nil {
+			s := fmt.Sprintf("/resources/%s", *v.CSS)
+			v.CSS = &s
+		}
+		if v.CSSMap != nil {
+			s := fmt.Sprintf("/resources/%s", *v.CSSMap)
+			v.CSSMap = &s
+		}
 	}
 
 	manifestSlice := make([]Source, len(manifest))

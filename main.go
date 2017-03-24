@@ -24,12 +24,12 @@ func main() {
 		p, ok := resp.(http.Pusher)
 		if ok {
 			for _, v := range highPriorityManifest {
-				p.Push("/resources/"+v.Source, nil)
+				p.Push(v.Source, nil)
 			}
 
 			for _, v := range highPriorityManifest {
 				if v.CSS != nil {
-					p.Push("/resources/"+*v.CSS, nil)
+					p.Push(*v.CSS, nil)
 				}
 			}
 		}
