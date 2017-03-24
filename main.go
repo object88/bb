@@ -11,7 +11,7 @@ const httpsPort = "3001"
 const graphqlPort = "8081"
 
 func main() {
-	manifest, highPriorityManifest := loadManifest()
+	_, highPriorityManifest := loadManifest()
 
 	index, err := loadTemplates(highPriorityManifest)
 	if err != nil {
@@ -23,11 +23,14 @@ func main() {
 	http.HandleFunc("/", func(resp http.ResponseWriter, _ *http.Request) {
 		p, ok := resp.(http.Pusher)
 		if ok {
-			p.Push("/resources/"+manifest["manifest"].Source, nil)
-			p.Push("/resources/"+manifest["vendor"].Source, nil)
-			p.Push("/resources/"+manifest["app"].Source, nil)
-			if manifest["app"].CSS != nil {
-				p.Push("/resources/"+*manifest["app"].CSS, nil)
+			for _, v := range highPriorityManifest {
+				p.Push("/resources/"+v.Source, nil)
+			}
+
+			for _, v := range highPriorityManifest {
+				if v.CSS != nil {
+					p.Push("/resources/"+*v.CSS, nil)
+				}
 			}
 		}
 		fmt.Fprint(resp, index)
