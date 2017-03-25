@@ -10,6 +10,8 @@ const httpPort = "3000"
 const httpsPort = "3001"
 const graphqlPort = "8081"
 
+var fourohfour string
+
 func main() {
 	_, highPriorityManifest := loadManifest()
 
@@ -19,8 +21,20 @@ func main() {
 	}
 	fmt.Println(index)
 
+	fourohfour, err = load404()
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Printf(fourohfour)
+
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources"))))
-	http.HandleFunc("/", func(resp http.ResponseWriter, _ *http.Request) {
+	http.HandleFunc("/", func(resp http.ResponseWriter, req *http.Request) {
+		fmt.Printf("Serving '%s'\n", req.URL.RequestURI())
+		if req.URL.RequestURI() != "/" {
+			// These are not the droids you're looking for.
+			handle404(resp, req)
+			return
+		}
 		p, ok := resp.(http.Pusher)
 		if ok {
 			for _, v := range highPriorityManifest {
@@ -37,6 +51,10 @@ func main() {
 	})
 	go http.ListenAndServeTLS(":"+httpsPort, "cert.pem", "key.pem", nil)
 	http.ListenAndServe(":"+httpPort, http.HandlerFunc(redirectToHTTPS))
+}
+
+func handle404(resp http.ResponseWriter, _ *http.Request) {
+	fmt.Fprintf(resp, fourohfour)
 }
 
 func redirectToHTTPS(w http.ResponseWriter, r *http.Request) {
